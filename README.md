@@ -1,6 +1,6 @@
 # Transport Network Monitoring Dashboard
 
-An internal network monitoring platform built for the **Dialog Transport Network Planning** team. It provides real-time and historical visibility into traffic, latency, and power consumption across 4000+ network devices.
+An internal network monitoring platform built for the **Dialog Axiata Transport Network Planning** team. It provides real-time and historical visibility into traffic, latency, and power consumption across 4000+ network devices.
 
 > This repository documents the project architecture and setup approach. Configuration files, dashboard JSONs, and automation scripts are maintained privately.
 

@@ -20,54 +20,7 @@ An internal network monitoring platform built for the **Dialog Transport Network
 
 ## Architecture
 
-```
-Network Devices (4000+)
-  CSR routers (~3500)  ·  AGG/CORE/PE  ·  ISP international  ·  Probe routers  ·  All (power)
-          │
-          │  SNMPv3  ·  IF-MIB + vendor MIBs  ·  port 161
-          ▼
-┌─────────────────────────────────────────────────────────┐
-│                  7 Telegraf instances                   │
-│                                                         │
-│  inst 1–4   CSR traffic   80 batch files × 50 IPs      │
-│  inst 5     AGG + CORE + ISP international              │
-│  inst 6     Power monitoring   (20 min interval)        │
-│  inst 7     RTT / IP SLA probes  (Cisco RTTMON MIB)    │
-└─────────────────────────────────────────────────────────┘
-          │
-          │  remote_write  ·  InfluxDB line protocol  ·  port 8428
-          ▼
-┌─────────────────────────────────────────────────────────┐
-│              VictoriaMetrics  (single-node)             │
-│   metrics: metrotraffic_  ·  saaprobe_  ·  router_power_│
-│   PromQL-compatible  ·  12-month retention              │
-└─────────────────────────────────────────────────────────┘
-          │
-          │  PromQL queries
-          ▼
-┌─────────────────────────────────────────────────────────┐
-│                      Grafana 12.x                       │
-│                                                         │
-│  Transport Network folder                               │
-│  ├── Traffic Graphs List   (interface table + P95)      │
-│  ├── Total Traffic         (all interfaces per device)  │
-│  ├── Aggregate Graphs      (metro / ISP / CDN totals)   │
-│  ├── RTT Graphs List       (P25–P95 latency table)      │
-│  └── Power Table           (avg / P95 / peak W)         │
-│                                                         │
-│  Maintenance folder  (drill-downs, load on row click)   │
-│  ├── Single Traffic Graph                               │
-│  ├── RTT Single Graph                                   │
-│  └── Power Graphs                                       │
-└─────────────────────────────────────────────────────────┘
-
-Daily Automation  (cron)
-  collect_isis_lsdb.py   →   parse_isis_lsdb.py   →   generate_*_configs.py
-       SSH / Netmiko           hostname+IP+category       writes batch .conf
-                                    ↕ MySQL                restarts instances
-                              db: mygrafanadata
-                              table: isisips
-```
+![Architecture](docs/transport_network_monitoring_architecture_clean.svg)
 
 ---
 

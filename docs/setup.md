@@ -30,11 +30,14 @@ The datasource uid used across all dashboards is `DS_VICTORIAMETRICS`. Set this 
 
 ## Automation cron schedule
 
+The pipeline runs 4 times a day to keep the device inventory in sync with live ISIS topology.
+
 ```
-01:00  collect ISIS LSDB from AGG/CORE routers
-02:00  parse LSDB → update MySQL device table
-02:30  regenerate CSR batch configs → restart instances 1–4
-02:45  regenerate power configs → restart instance 6
+01:03  13:03  collect ISIS LSDB from AGG/CORE routers → parse → update MySQL
+07:03  19:03
+
+02:03  14:03  regenerate CSR batch configs → restart instances 1–4
+08:03  20:03
 ```
 
 ## MySQL schema
